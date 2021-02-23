@@ -32,10 +32,15 @@ public class GUIManager {
                 BufferedReader inFile = new BufferedReader(fr);
 
                 //Öppna fil för skrivning
-                String filename2 = filename + "Copy";
+                String filename2 = filename.substring(0, (filename.length() - 4)) + "_Copy.txt";
                 FileWriter fw = null;
                 try {
                     fw = new FileWriter(filename2);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fw.append(textArea1.getText());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -45,10 +50,6 @@ public class GUIManager {
                 // Läs in filen
                 String line;
                 try {
-                    for (int i = 0; i < textArea1.toString().length(); i++) {
-                        outFile.println(textArea1);
-                    }
-
                     inFile.close();
                     outFile.flush();
                     outFile.close();
