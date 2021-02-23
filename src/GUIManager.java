@@ -6,19 +6,10 @@ import java.io.*;
 public class GUIManager {
 
     public GUIManager() {
-        clear.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textArea1.setText("");
-            }
-        });
-        Copy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                textArea1.append("\n" + textArea1.getText());
-                System.out.println(textArea1.getText());
-            }
-        });
+        clear.addActionListener(new clearText());
+
+        Copy.addActionListener(new copyText());
+
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent a) {
@@ -41,7 +32,7 @@ public class GUIManager {
                 BufferedReader inFile = new BufferedReader(fr);
 
                 //Öppna fil för skrivning
-                String filename2 = filename+"Copy";
+                String filename2 = filename + "Copy";
                 FileWriter fw = null;
                 try {
                     fw = new FileWriter(filename2);
@@ -66,40 +57,7 @@ public class GUIManager {
                 }
             }
         });
-        openButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Öppna fil för läsning
-                JFileChooser fc = new JFileChooser();
-                int result = fc.showOpenDialog(null);
-                String filename;
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    filename = fc.getSelectedFile().getAbsolutePath();
-                } else {
-                    filename = "exempel.txt";
-                }
-
-                FileReader fr = null;
-                try {
-                    fr = new FileReader(filename);
-                } catch (FileNotFoundException a) {
-                    a.printStackTrace();
-                }
-                BufferedReader inFile = new BufferedReader(fr);
-
-                // Läs in filen
-                String line;
-                try {
-                    while ((line = inFile.readLine() ) != null) {
-                        textArea1.setText("");
-                        textArea1.append(line);
-                    }
-                    inFile.close();
-                } catch (IOException a) {
-                    a.printStackTrace();
-                }
-            }
-        });
+        openButton.addActionListener(new openText());
     }
 
     public static void main(String[] args) {
@@ -116,4 +74,54 @@ public class GUIManager {
     private JButton Copy;
     private JButton saveButton;
     private JButton openButton;
+
+    private class openText implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Öppna fil för läsning
+            JFileChooser fc = new JFileChooser();
+            int result = fc.showOpenDialog(null);
+            String filename;
+            if (result == JFileChooser.APPROVE_OPTION) {
+                filename = fc.getSelectedFile().getAbsolutePath();
+            } else {
+                filename = "exempel.txt";
+            }
+
+            FileReader fr = null;
+            try {
+                fr = new FileReader(filename);
+            } catch (FileNotFoundException a) {
+                a.printStackTrace();
+            }
+            BufferedReader inFile = new BufferedReader(fr);
+
+            // Läs in filen
+            String line;
+            try {
+                while ((line = inFile.readLine()) != null) {
+                    textArea1.setText("");
+                    textArea1.append(line);
+                }
+                inFile.close();
+            } catch (IOException a) {
+                a.printStackTrace();
+            }
+        }
+    }
+
+    private class clearText implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            textArea1.setText("");
+        }
+    }
+
+    private class copyText implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            textArea1.append("\n" + textArea1.getText());
+            System.out.println(textArea1.getText());
+        }
+    }
 }
